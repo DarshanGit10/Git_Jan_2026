@@ -1,0 +1,1273 @@
+Foundations of Git & GitHub
+
+---------------------------------------------
+Alright everyone, welcome to the Git and GitHub course.
+
+Before we start, let me be very clear —
+Git and GitHub are mandatory skills for every full-stack developer.
+Frontend, backend, DevOps, data science — doesn’t matter.
+
+If you’re writing code and working in a team, you must know Git.
+
+------------------------------------------------
+
+Lecture 1: Introduction to Git & Version Control System
+
+In this session, we are going to understand Git in a very simple way
+and also understand why Git is so important.
+Git is so important that every single tech company uses it.
+
+It can be:
+a small startup
+or a big company like Google, Facebook, Amazon, Netflix
+
+Every tech company uses Git.
+
+------------------------------------------------------
+
+Before Definition – Let’s Understand the Problem
+
+Before we jump into any formal definition,
+let’s first understand the real problem Git solves.
+
+Problem 1: Managing Code as a Solo Developer
+
+Even if you are working alone, managing code is difficult.
+
+You face problems like:
+Multiple versions of your code
+No proper history of changes
+No clear backup
+Confusion like: “Which file was correct?”
+
+As your project grows, these problems grow too.
+----------
+Problem 2: Working in a Team
+
+Now imagine working in a team:
+5 developers
+10 developers
+or even 50+ developers
+
+One person changes a file.
+Everyone else needs that change.
+
+Another person changes another file.
+You need that change.
+
+If everyone starts copying files manually:
+
+copy-paste
+Google Drive
+Dropbox
+zip files
+
+It becomes impossible to manage.
+---------
+Problem 3: What If Your System Crashes?
+
+Very important question.
+What if:
+your laptop crashes?
+your hard disk fails?
+All your project files are gone.
+This is a real risk.
+-----------------------------------------------------------------
+
+Git Solves All These Problems
+
+This is where Git comes into the picture.
+
+Git helps us to:
+manage code properly
+track every change
+work with teams easily
+keep backup safely
+maintain complete history
+-------
+Git + Remote Repository
+
+With Git, we usually use an online repository.
+This repository:
+stores your code safely
+keeps a record of every change
+has timestamps
+has messages explaining why a change was made
+So even if your system crashes,
+your code is safe online.
+
+-----------
+
+Code Synchronization Made Easy
+
+When you make changes:
+you tell Git: “I’ve made these changes”
+you upload them to the online repository
+Other team members just run a few commands
+and they get your changes.
+
+Same way:
+when they make changes
+you can pull those changes
+
+No copy-paste.
+No confusion.
+
+--------
+Version Tracking
+
+Git also helps you manage versions.
+
+Example:
+
+Version 1.0 – basic features
+Version 1.1 – new feature added
+Version 1.2 – bug fixes
+
+Git knows:
+what feature was added in which version
+who wrote which line of code
+at what time
+-----------
+
+Going Back in Time (Very Powerful)
+
+If a new feature breaks something:
+you don’t delete code
+you don’t rewrite everything
+You just tell Git:
+“Take me back to the previous version”
+
+That’s it.
+This works for every team member.
+--------
+
+Git History
+
+Each time you submit code:
+
+you add a message
+Git creates a record
+So later, you can clearly see:
+what was changed
+why it was changed
+who changed it
+--------
+
+New Team Member? No Problem
+
+If a new developer joins your team:
+you don’t send zip files
+you don’t send Google Drive links
+You just share:
+the repository link
+
+They run a few commands
+and get the entire project with full history.
+
+---------------------------------------
+
+Simple Definition of Git
+
+Now let’s look at the definition.
+
+Git is a free and open-source distributed version control system,
+designed to handle everything from small to very large projects
+with speed and efficiency.
+
+The important words here are:
+Distributed Version Control System
+
+-------------------------------------------
+Types of Version Control Systems
+
+There are mainly three types:
+
+1. Local Version Control
+Multiple copies of the same project
+Everything stored on one system
+Very risky
+Not recommended
+
+2. Central Version Control
+One central server
+Team sends changes to it
+But local history is limited
+
+3. Distributed Version Control (Git)
+This is what Git uses.
+In Git:
+every developer has full project history locally
+online repository also has full history
+everyone stays in sync
+This makes Git very powerful and safe.
+
+------------------
+
+Git and Commands
+As developers, we use Git mostly through:
+terminal
+Git Bash
+There are GUI tools also,
+but in companies, command-line Git is mandatory.
+
+Online Repositories
+
+You can use:
+GitHub
+GitLab
+Bitbucket
+
+In this course, we’ll use GitHub
+
+-------------------------------------
+
+
+Git Download, Installation & Environment Setup
+
+This includes:
+
+Downloading Git
+Installing Git
+Verifying installation
+Creating a GitHub account
+Setting up our editor
+Basic project folder setup
+-------
+Step 1: Check If Git Is Already Installed
+
+Before downloading anything,
+let’s first check if Git is already present on your system.
+
+Open:
+CMD or PowerShell → if you’re on Windows
+Terminal → if you’re on Mac or Linux
+
+Now type this command:
+
+git --version
+
+-------------
+
+Step 2: Download Git
+
+If Git is not installed,
+open your browser and go to the official Git website.
+
+You can:
+
+search for Git download on Google
+or directly visit the official website
+
+The site will:
+auto-detect your operating system
+show the correct download button
+
+Click Download, save the installer, and open it.
+
+----------------
+
+Step 3: Install Git
+
+During installation:
+
+Keep clicking Next
+No special configuration needed
+Default settings are perfectly fine
+Once installation is complete:
+Click Finish
+Git Bash will also be installed automatically
+Installation is now done.
+
+--------
+
+Verify Git Installation
+
+Now reopen:
+
+CMD / Terminal / Git Bash
+
+Again run:
+
+git --version
+
+If you see the version:
+👉 Git is successfully installed
+👉 You are ready to use Git commands
+
+------------
+
+GitHub Registration
+
+Now let’s talk about GitHub.
+
+GitHub is an online repository
+where we will store our code.
+
+For now, you only need to:
+Create a free account
+Sign up using email
+Verify your account
+Log in
+Once logged in:
+Open your profile
+Note these three things:
+Username
+Email
+Name
+
+These details will be important later.
+
+-----------------------
+
+
+Git Configuration – Name & Email
+
+now let us quickly configure two very important things in Git:
+
+User name
+User email
+These two configurations are mandatory.
+-------
+Why Is This Configuration Important?
+
+Whenever we work on a project:
+Git tracks every change
+Git also tracks who made that change
+In real companies:
+multiple developers work on the same project
+managers and teammates need to know
+👉 who did what
+That information comes from:
+your name
+your email
+
+-----------
+
+What Git Records
+
+Every time you make a change:
+
+Git stores your name
+Git stores your email
+Git stores the time
+Git stores the change
+So later, anyone can see:
+this line of code was written by this person
+at this time
+using this system
+
+----------------------
+
+Configure Email
+
+Now type the following command:
+
+git config --global user.email "your-email@example.com"
+
+Replace the email with:
+👉 the same email you used on GitHub
+
+Important:
+
+--global means this setting applies to your entire system
+
+You don’t need to configure this again for every project
+Press Enter.
+
+----------------------
+
+Configure Name
+
+Now configure your name.
+
+Type:
+git config --global user.name "Your Name"
+
+Use:
+your real name
+or your GitHub display name
+Press Enter.
+
+-------------------
+
+Verify Configuration
+
+To verify everything, type:
+
+git config --list
+
+Press Enter.
+
+You should see:
+user.name
+user.email
+
+This confirms that:
+👉 Git is successfully configured on your system.
+
+--------------
+
+Example Explanation to Students
+
+If you later modify:
+
+index.html
+or any other file
+Git will record:
+this change was done by you
+using this system
+at this time
+This is extremely important in team projects.
+
+-------
+
+About Git Bash
+
+Now let me talk about Git Bash.
+
+During Git installation:
+Git Bash is installed automatically
+Git Bash:
+is designed specifically for Git
+supports Linux-style commands
+works perfectly with Git
+You can open Git Bash and run:
+
+git --version
+
+All Git commands work the same.
+Which Terminal Should You Use?
+You can use:
+CMD
+PowerShell
+Git Bash
+Terminal (Mac/Linux)
+
+Important point:
+👉 Git commands remain the same everywhere
+
+Use whichever terminal you are comfortable with.
+
+
+
+--------------------------------
+
+Git Basics, Lifecycle & Core Commands
+
+Alright everyone,
+now it’s time to get serious and understand how Git actually works.
+
+Till now:
+
+we installed Git
+we configured Git
+we set up our environment
+Now we’ll talk about:
+Git lifecycle
+how history is saved
+and the most important beginner commands
+
+------------------------------------
+
+Local System vs Online System
+
+There are two places involved:
+
+Local system
+your laptop or computer
+Online system
+an online repository
+also called a remote repository
+A repository simply means:
+👉 a container that stores your project files and history
+-------
+Git vs GitHub (Very Important)
+
+Remember this clearly:
+Git → tool that tracks changes
+GitHub → service that stores code online
+GitHub is just a provider.
+Other providers:
+GitLab
+Bitbucket
+Concept remains the same everywhere.
+
+------------------
+
+Where We Actually Work (Working Directory)
+
+On your system:
+you create files
+write code
+delete files
+modify content
+This place is called:
+👉 Working Directory
+
+Example:
+index.html
+images
+CSS files
+JS files
+
+Everything starts here.
+
+------------
+
+Why We Need Staging Area
+
+When we want to save history,
+we don’t save directly.
+We do it in steps.
+First step:
+👉 Staging Area
+Staging area allows us to:
+review changes
+organize what we want to save
+decide what should go into history
+
+--------------------
+
+step-by-Step Git Lifecycle
+
+The Git lifecycle works like this:
+
+1️Working Directory
+2️Staging Area
+3️Local Repository
+4️Online Repository (optional)
+
+-------------
+Git Add → Staging Area
+
+When we run:
+git add
+
+We are saying:
+👉 “Git, take these changes and move them to staging area”
+
+Example:
+
+new file
+updated code
+deleted line
+
+All tracked here.
+
+----------------------------
+
+Git Commit → Local Repository
+
+When we run:
+
+git commit
+
+We are saying:
+👉 “Git, take a snapshot of staged changes”
+
+A commit:
+
+stores files
+stores changes
+stores name
+stores email
+stores time
+stores a message
+
+This snapshot is saved in:
+👉 Local Repository
+
+-----------------
+
+Git Push → Online Repository
+
+When everything looks good and tested:
+
+git push
+
+We send:
+files
+history
+commits
+To:
+👉 GitHub or any remote repository
+This makes code:
+shareable
+safe
+accessible
+--------------
+
+Simple Example (Explain While Coding)
+
+Let’s say:
+
+I open index.html
+I add a <h1>Hello World</h1>
+Right now:
+file is in working directory
+Then:
+git add .
+change goes to staging area
+Then:
+git commit -m "added index page"
+snapshot saved in local repository
+Then later:
+git push
+
+code goes to online repository
+
+-----------------------
+Core Lifecycle flow
+Work → Stage → Commit → Push
+-----------------------
+
+Basic Git Commands
+
+Command 1: git init
+
+This command is mandatory.
+
+git init
+Meaning:
+👉 “Git, start tracking this folder”
+Without this:
+Git does not know what to track
+This creates a hidden folder:
+.git
+This folder stores:
+history
+configuration
+commits
+branches
+----------------------
+
+Command 2: git status
+git status
+
+This tells us:
+what files are untracked
+what files are staged
+what is ready to commit
+You should use this very frequently.
+
+----------------------
+
+Command 3: git add
+
+To add everything:
+
+git add .
+To add a single file:
+git add index.html
+
+This moves changes to:
+staging area
+
+---------------
+
+Command 4: git commit
+git commit -m "your message"
+
+
+Message should explain:
+
+what you did
+
+why you did it
+
+Examples:
+
+added login page
+fixed header bug
+updated styles
+
+-----------------
+
+Command 5: git log
+git log
+
+This shows:
+commit history
+author name
+email
+date
+commit message
+commit ID
+
+This is how teams track:
+👉 who did what and when
+------------------
+
+Branch Rename (Master → Main)
+
+By default, Git uses master.
+
+Industry standard now is:
+👉 main
+
+Rename using:
+
+git branch -M main
+
+---------------------------
+
+Connecting to Remote Repository
+
+To connect GitHub:
+
+git remote add origin <repo-link>
+
+Meaning:
+
+remote → online repository
+origin → nickname for link
+Now Git remembers this link.
+
+-------------
+
+Pushing to GitHub
+git push -u origin main
+Meaning:
+push changes
+to origin
+on main branch
+
+-u sets default tracking.
+
+----------------
+
+What Happens After First Time
+
+You do NOT run all commands every time.
+
+Usually workflow is:
+
+git add .
+git commit -m "message"
+git push
+
+That’s it.
+
+--------------------
+
+Pushing Code to GitHub (Remote Repository)
+
+now let’s move to the next important step.
+
+Till now:
+we created files
+added them to staging area
+committed them to local repository
+
+Now it’s time to:
+👉 push all our changes to an online server
+
+-----------------
+
+What Do We Mean by Online Server?
+
+By online server, I mean:
+an online container
+also called a remote repository
+This is where:
+our code
+our commit history
+our project
+will be stored online.
+
+In our case, this online container is GitHub.
+
+-------------
+
+Step 1: Create an Online Repository on GitHub
+
+First, open your browser and go to:
+
+👉 github.com/new
+This will allow you to:
+create a new repository
+which will act as a container for our project
+
+Repository Name
+
+Give your repository a name.
+I recommend:
+using the same name as your project folder
+
+Example:
+Project folder: SplitMate
+Repository name: SplitMate
+This keeps things simple.
+
+Visibility
+
+You can choose:
+Public → anyone can see your code
+Private → only you can see your code
+For now:
+choose Public (recommended for learning)
+
+Click Create Repository.
+
+------------------------
+
+Step 2: Why Authentication Is Needed
+
+Now pause and understand this carefully.
+
+GitHub needs to verify:
+👉 “Is this person really the owner of this account?”
+
+On your local system:
+Git knows your name and email
+but GitHub doesn’t trust local info alone
+So we need a secure way to authenticate.
+
+That’s where:
+👉 Personal Access Token (PAT) comes in
+
+------------------
+
+Step 3: Generate Personal Access Token
+
+Go to:
+
+GitHub → Profile
+Settings
+Developer settings
+Personal access tokens
+Fine-grained tokens
+
+Click Generate new token.
+
+oken Details
+
+Give a name
+Example: My Desktop or Office Laptop
+
+Set expiry
+Example: 30 days (recommended for practice)
+
+Select permissions
+For now, select full repository access
+
+Click Generate Token.
+
+Important Warning (Tell Students Clearly)
+
+⚠️ This token is shown only once
+⚠️ Copy it immediately
+⚠️ Save it somewhere safe
+
+This token works like:
+👉 your GitHub password for Git
+------------------------
+Command: Add Remote Repository
+
+Type:
+
+git remote add origin <repository-url>
+
+
+Explanation:
+
+remote → online repository
+add → connect a new remote
+origin → nickname for the URL
+<repository-url> → GitHub repo link
+We use origin by convention.
+Press Enter.
+
+Now your local system knows:
+👉 where to push code online
+
+------------------------
+
+Ensure Correct Branch (Main)
+By default, Git uses master.
+
+Industry standard now is:
+👉 main
+
+Rename branch using:
+git branch -M main
+
+To check current branch:
+git branch
+
+You should see:
+👉 * main
+
+---------------
+
+Push Code to GitHub
+
+Now we are ready to push.
+
+Run:
+git push -u origin main
+
+Explanation:
+
+push → send changes
+origin → remote repository
+main → branch
+-u → set default upstream
+
+------------
+
+Authentication (Very Important)
+
+At this point:
+GitHub will ask for credentials
+
+Enter:
+
+Username → your GitHub username
+Password → paste the personal access token
+⚠️ Password will be invisible — this is normal.
+
+Press Enter.
+
+--------------------
+
+Verify on GitHub
+
+Now go back to your browser.
+Refresh your GitHub repository.
+
+You should see:
+
+your files
+commit history
+commit message
+time of commit
+
+Your local history is now:
+👉 successfully pushed online
+
+---------------------
+
+Understanding the Timeline
+
+Notice something important.
+
+If GitHub shows:
+“34 minutes ago”
+That’s because:
+
+commit time is recorded locally
+GitHub just receives the history
+Git does not change timestamps.
+Matching Local and Online History
+
+Run locally:
+git log
+
+On GitHub:
+open the commit
+You will see:
+same commit message
+same commit ID
+same author
+same time
+
+This proves:
+👉 Git history is preserved exactly
+
+------------------------------------------
+
+Practicing Git Commands (Hands-On)
+
+Alright everyone,
+in this lecture we are not learning anything new.
+
+We are simply going to:
+
+practice the commands
+understand how Git behaves
+see how changes move from local → staging → commit → GitHub
+
+This lecture is only about playing with Git.
+
+-------------
+
+Step 1: Check Current Status
+
+Before doing anything, let’s always check where we are.
+
+Run:
+git status
+
+This command tells us:
+are there any changes?
+are files modified?
+are files staged?
+
+Right now, there are no changes.
+
+----------
+
+Step 2: Make a Small Change
+
+Let’s modify index.html.
+
+I’ll:
+delete existing content
+save the file
+Now go back to terminal and run:
+git status
+
+You’ll see:
+👉 modified: index.html
+Why “modified”?
+Because:
+Git is already tracking this file
+
+we changed its content
+--------------
+
+Step 3: Modify File Again
+
+Now I’ll add some code.
+I’ll:
+use boilerplate HTML
+add project title
+save the file
+
+Again, run:
+git status
+
+You’ll still see:
+👉 modified: index.html
+This confirms:
+we are still in working directory
+changes are not staged yet
+
+---------------
+
+Step 4: Move Changes to Staging Area
+
+Now let’s move changes to staging area.
+
+Run:
+git add .
+
+This means:
+👉 add all modified files
+Now check status again:
+git status
+
+You’ll see:
+file name in green
+message: changes to be committed
+
+This means:
+👉 file is now in staging area
+
+--------------
+
+Step 5: Add Another File
+
+Now let’s create a new file:
+about.html
+
+Add some text inside it and save.
+
+Now run:
+
+git status
+You’ll see:
+new file detected
+file is untracked
+
+-------------------
+
+Step 6: Add New File to Staging Area
+
+Now stage everything again:
+git add .
+
+Check status:
+git status
+
+Now staging area contains:
+modified index.html
+new about.html
+
+------------------
+
+Step 7: Commit Changes
+
+Now we take a snapshot.
+
+Run:
+git commit -m "updated index and added about page"
+
+This does:
+
+stores files
+stores changes
+stores author info
+stores message
+
+Now check:
+git status
+
+You’ll see:
+👉 nothing to commit
+Meaning:
+working directory is clean
+changes are saved in local repository
+
+--------------------
+
+Step 8: View Commit History
+
+Now check history:
+git log
+You’ll see:
+
+latest commit
+previous commit
+author name
+commit message
+commit ID
+
+This shows complete history.
+
+-----------
+
+Understanding HEAD and Origin
+
+Now observe carefully.
+
+HEAD → your current position
+origin/main → last commit pushed to GitHub
+Right now:
+HEAD is ahead
+origin/main is behind
+
+Why?
+Because:
+we committed locally
+but we haven’t pushed yet
+
+----------------
+
+Step 9: Push Changes to GitHub
+
+Now let’s push:
+
+git push origin main
+Once pushed:
+
+GitHub gets latest commits
+origin/main moves forward
+Refresh GitHub repository.
+
+You’ll now see:
+new files
+new commit message
+
+correct timestamps
+
+-----------------
+
+Step 10: Verify Commit on GitHub
+
+Click on the commit.
+
+You can see:
+
+what file changed
+what lines were added
+what lines were removed
+
+This is exactly how:
+👉 teams review code
+
+-----------------
+
+Step 11: Make More Changes (Partial Staging)
+
+Now let’s try something different.
+
+Modify:
+
+index.html
+about.html
+Save both.
+Check status:
+
+git status
+
+
+You’ll see:
+👉 both files modified
+
+Step 12: Stage Only One File
+
+Now stage only index.html:
+
+git add index.html
+
+Check status again:
+
+git status
+
+You’ll notice:
+
+index.html → staged (green)
+
+about.html → not staged
+
+This proves:
+👉 staging area lets you control what to commit
+
+Step 13: Commit Only One File
+Now commit:
+git commit -m "updated index page"
+
+Only index changes are committed.
+About page is still pending.
+
+---------------
+
+Step 14: Push This Commit
+git push origin main
+
+Check GitHub:
+only index changes are visible
+about page change is not pushed yet
+
+Step 15: Commit Remaining File
+Now stage about page:
+
+git add about.html
+
+Commit it:
+
+git commit -m "updated about page"
+Push it:
+
+git push origin main
+Now everything is synced.
+
+----------------------
+
+Step 16: Short Commit History View
+
+Instead of long logs, use:
+
+git log --oneline
+This shows:
+
+short commit ID
+commit message
+HEAD and origin position
+
+Very useful for daily work.
+---------------
+
