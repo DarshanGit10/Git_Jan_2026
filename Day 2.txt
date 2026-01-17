@@ -1,0 +1,1505 @@
+Day 2
+Understanding Git File States (Untracked, Modified, Unmodified)
+
+Hey there.
+Welcome back.
+
+So in the previous lecture, we discussed the complete Git flow —
+our working directory, the staging area, the local repository, and finally the remote repository.
+
+By now, I’m sure this part is clear.
+
+You already know:
+We add,
+we commit,
+and then we push.
+
+Simple.
+
+Now today, we’re going to talk about something that most courses mention,
+but very few actually explain properly.
+
+And that is —
+what exactly happens to files inside the working directory.
+
+Because when you run git status,
+Git shows messages like untracked, modified, or sometimes nothing at all.
+
+So the question is:
+What do these words really mean?
+
+Let’s break it down slowly.
+
+----------------------
+
+Revisiting the Git Lifecycle (Quickly)
+
+Once again, we start from the working directory.
+
+This is where we actually write code.
+This is where files are created, edited, or deleted.
+
+From the working directory,
+we move changes to the staging area using git add.
+
+From the staging area,
+we move them to the local repository using git commit.
+
+And finally,
+we send everything to the remote repository using git push.
+
+So far, so good.
+
+But today, we’re going to zoom into just one part —
+the working directory.
+
+--------------
+What Really Exists Inside the Working Directory
+
+Inside the working directory,
+files don’t all live in the same state.
+
+There are actually three different states:
+
+Untracked
+Unmodified
+Modified
+
+And Git decides these states based on your actions.
+
+Let me explain this using a real example.
+------------------
+
+Initial State – Everything Is Clean
+
+Right now, let’s assume I run git status.
+
+Git tells me:
+
+working tree clean
+
+This means:
+No changes
+No new files
+Nothing pending
+
+All files are tracked and unmodified.
+
+--------------
+
+Creating a New File – Untracked
+
+Now I create a new file.
+
+Let’s say I create contact.html.
+I write some basic boilerplate code and save the file.
+Now I run git status.
+
+Git says:
+untracked files: contact.html
+
+Why?
+
+Because Git has never seen this file before.
+Git doesn’t automatically track new files.
+A new file always starts as untracked.
+
+This is very important to remember.
+
+--------------
+
+Editing an Existing File – Modified
+
+Now let’s say I open index.html.
+
+This file already existed.
+It was already tracked earlier.
+
+I add a new paragraph and save it.
+
+Now I run git status again.
+
+Git says:
+
+modified: index.html
+untracked: contact.html
+
+So what happened?
+
+index.html moved to modified,
+because I changed something inside it.
+
+contact.html stayed untracked,
+because I still haven’t added it to Git.
+
+-----------------
+
+Unmodified Files
+
+What about files that I didn’t touch?
+
+For example, about.html.
+
+If I didn’t change it at all,
+Git considers it unmodified.
+
+That’s why it doesn’t even show up in git status.
+
+Unmodified files are tracked files with no changes.
+
+-------------------------
+
+So Now Inside the Working Directory
+
+At this moment, we have:
+
+One untracked file (contact.html)
+One modified file (index.html)
+One unmodified file (about.html)
+
+All of this is still inside the working directory.
+
+Nothing has reached the staging area yet.
+
+------------
+
+Running git add – What Actually Happens
+
+Now I run:
+
+git add .
+
+This single command does two things:
+It starts tracking new files
+It stages changes of modified files
+Now when I run git status, Git shows:
+new file: contact.html
+modified: index.html
+
+Both are now inside the staging area.
+At this point, Git officially knows:
+“These files matter.”
+
+-----------
+
+Important Concept – Tracking Happens Only Once
+
+This is critical.
+
+A file becomes tracked for life
+the moment you add it for the first time.
+
+After that:
+
+Any change → modified
+No change → unmodified
+
+But it will never go back to untracked
+unless you explicitly remove it.
+
+That’s why git add is such an important command.
+
+---------
+
+Committing the Changes
+
+Now I commit.
+
+git commit -m "Updated index and added contact page"
+
+What happens?
+Everything in the staging area
+moves into the local repository.
+
+Now when I run git status:
+
+working tree clean
+That means:
+All files are tracked
+All files are unmodified
+No pending changes
+
+-------------------
+
+Making More Changes
+
+Now let’s change about.html.
+I add a paragraph and save.
+
+Run git status.
+Git says:
+modified: about.html
+So this file moved from unmodified → modified.
+Now let’s create another new file:
+user.html.
+Save it.
+Run git status.
+Now Git says:
+
+modified: about.html
+untracked: user.html
+
+Again — same pattern.
+
+New file → untracked
+Edited file → modified
+
+----------------
+
+Adding and Committing Again
+
+Now I run:
+
+git add .
+
+Both changes move to staging.
+
+Then:
+git commit -m "Added user page and updated about page"
+
+Now both changes are saved locally.
+
+Then I push:
+git push origin main
+
+Now everything is synced online.
+
+---------------
+
+Final State
+
+At this point:
+
+All files are:
+Tracked
+Unmodified
+Clean
+
+Until I touch them again.
+
+The moment I edit a file,
+it becomes modified.
+
+The moment I create a new file,
+it becomes untracked.
+
+------------------------------------------
+
+Commit Timeline – Understanding What Happens Behind the Scenes
+
+we are going to talk about the commit timeline.
+
+In the previous lecture, we created a few commits.
+We added files, we modified files, and we committed those changes.
+
+Now in this lecture, we are not going to write any new commands immediately.
+Instead, we are going to slow down and understand what actually happened behind the scenes.
+
+Don’t worry.
+This is a basic concept lecture.
+
+I’m just going to explain how commits work internally,
+how they are connected,
+and how Git maintains the sequence of changes.
+
+------
+What Is a Commit Really?
+
+The first thing you need to understand is this:
+
+A commit is not just a message.
+A commit is an object.
+
+This object holds information.
+
+That information can be:
+changes in files,
+new files added,
+lines removed,
+or files deleted.
+
+In simple words,
+a commit is a snapshot of changes at a particular point in time.
+
+Not the entire project every time —
+only the changes.
+
+-----
+
+The First Commit
+
+Now let’s talk about the very first commit.
+
+When we do the first commit in any Git project,
+there is nothing before it.
+
+So this first commit becomes the parent commit.
+
+It holds all the information about:
+the initial project structure,
+the files we created,
+for example index.html.
+
+Since there was nothing before this,
+this commit has no parent.
+
+This commit is identified using a commit ID.
+
+That commit ID is a hash,
+a long string of characters.
+
+Usually, we refer to only the first seven characters
+because that is enough to uniquely identify a commit.
+
+So the first commit:
+has no parent,
+holds all initial changes,
+and has its own unique commit ID.
+
+------------
+
+Second Commit – How It Works
+
+Now suppose after the first commit,
+we update index.html
+and we also create about.html.
+
+When we create the second commit,
+this commit does not store everything again.
+
+Instead, it stores only:
+what changed after the first commit.
+
+So this second commit holds:
+the update made in index.html,
+and the creation of about.html.
+
+This commit also has its own unique commit ID.
+
+But here is the important part.
+
+This commit is connected to the previous commit.
+
+Why?
+
+Because this commit alone does not know the full project history.
+To understand the full project,
+Git connects it to the parent commit.
+
+Think of it like a chain.
+
+Each commit points to the previous one.
+
+-----------
+
+Why Commits Are Connected
+
+Now you might notice arrows in diagrams.
+
+Those arrows are not magic.
+They simply mean one thing.
+
+This commit knows about its parent.
+
+The commit does not store all files again.
+It only stores the differences
+and uses the parent commit to reconstruct everything else.
+
+So the arrow just represents a connection,
+a reference,
+a pointer to the previous commit.
+
+Some diagrams show arrows.
+Some show straight lines.
+Some show just boxes connected.
+
+All of them mean the same thing.
+
+Each commit is connected to the one before it.
+
+------------------
+
+Third Commit and Beyond
+
+Now suppose we update index.html again.
+
+We create a third commit.
+
+This third commit:
+holds only the new changes made after the second commit.
+
+Maybe:
+one line added,
+one line removed.
+
+That’s it.
+
+This commit also has:
+its own unique commit ID,
+and a pointer to the second commit.
+
+Because of this connection:
+Git still knows about about.html,
+Git still knows about the original index.html,
+even though this commit only stores a small change.
+
+-----------------
+
+Why Git Does This
+
+Now imagine a big project.
+
+React.
+Netflix.
+Any large production codebase.
+
+These projects can have:
+20,000
+30,000
+or even more commits.
+
+If Git stored the entire project in every commit,
+storage would explode.
+
+Let’s say the first commit was 10 MB.
+
+If every commit stored 10 MB again:
+30,000 commits would be impossible to manage.
+
+So Git does something very smart.
+
+It stores:
+the full project only once,
+and after that, only the differences.
+
+That’s why:
+some commits may be just a few KB,
+some may be 100 KB,
+some may be larger if big changes were made.
+
+But never the full project every time.
+
+-----------------
+
+Understanding with a Real Commit Example
+
+Now let’s look at an actual commit.
+
+The first commit has:
+a commit ID,
+zero parents,
+and shows that one file was added.
+
+That means:
+this is the initial commit.
+
+Now the next commit:
+shows one parent.
+
+That parent is the previous commit.
+
+It shows:
+two files changed,
+some lines added,
+some lines deleted.
+
+This commit holds only the new information,
+not the entire code.
+
+The same applies to every commit after that.
+
+Each commit:
+stores changes,
+points to its parent,
+and together they form a complete timeline.
+
+----------------
+
+
+What Is HEAD?
+
+Now there is one important term you will hear again and again.
+
+HEAD.
+
+HEAD simply means:
+your current position in the commit timeline.
+
+Whenever you create a new commit,
+HEAD moves forward to that commit.
+
+So HEAD always points to:
+where you are right now.
+
+If you move HEAD to an older commit,
+your project will look exactly like it did at that time.
+
+If HEAD is here,
+you see only files that existed at that moment.
+
+If HEAD is here,
+you see newer files and newer changes.
+
+We will play with HEAD in future lectures,
+so don’t worry if it feels abstract right now.
+
+Just remember:
+HEAD = current position.
+
+------------------
+
+Local Repository vs Remote Repository
+
+One more important thing.
+
+Everything we discussed so far
+is happening in the local repository.
+
+The commit timeline exists locally.
+
+When we do a push,
+we are simply copying this entire timeline
+to the remote repository.
+
+Nothing new is created.
+Nothing is changed.
+
+It is just copied as-is.
+
+----------------
+
+Why Push Is Also Efficient
+
+Just like commits,
+push also sends only the changes.
+
+If your project was 10 MB initially,
+that is sent only once.
+
+Next push might be:
+100 KB,
+50 KB,
+or even less.
+
+Git does not resend everything again and again.
+
+That’s why Git is fast,
+efficient,
+and scalable.
+
+-------------------
+
+Multiple Timelines (Branches)
+
+Right now,
+we are working on the main branch.
+
+So we have one straight timeline.
+
+But Git allows us to create:
+multiple branches,
+multiple timelines.
+
+Each branch can have:
+its own commits,
+its own history.
+
+Big projects can have:
+dozens of branches,
+all moving independently.
+
+We will cover branches in detail later.
+
+-------------------
+
+Final Thoughts
+
+So the key idea is this:
+
+Commits form a timeline.
+Each commit stores only changes.
+Each commit is connected to its parent.
+HEAD tells you where you are.
+Push copies the timeline to remote.
+
+That’s all.
+------------------------------------
+
+Git Diff – Understanding Changes Before You Commit
+
+Hey there.
+Welcome back.
+
+Now, in the previous lecture, we were trying to understand a few concepts,
+and in between that, I made a small change.
+
+I updated my user.html file.
+I added some content to it.
+
+But here’s the important part.
+
+I did not run git add.
+I did not commit anything.
+I did not push anything.
+
+I only made changes.
+
+So right now, my file is in the modified state.
+
+Let me confirm that.
+
+I’ll run git status.
+
+And as you can see,
+Git clearly tells me that user.html is modified.
+
+So Git knows that something has changed,
+but it doesn’t know yet whether I want to save this change or not.
+--------------
+
+The Real Problem Developers Face
+
+Now let me ask you something.
+
+What if I made these changes yesterday?
+
+Or maybe I made them in the morning,
+then I went for lunch,
+then coffee,
+then some other work.
+
+Now I come back and I honestly don’t remember:
+
+What exactly did I change?
+Which line did I add?
+Which line did I remove?
+
+This is a very common situation.
+
+And this is exactly why git diff exists.
+
+------------
+
+What Is git diff?
+
+git diff literally means difference.
+
+This command shows you the difference between:
+your last committed version,
+and your current working directory.
+
+In simple words:
+
+“What did I change after my last commit?”
+
+That’s it.
+
+-----------
+
+Using git diff
+
+So right now,
+I know my file is modified.
+
+Let me run:
+
+git diff
+
+The moment I run this command,
+Git shows me exactly what changed.
+
+I can clearly see that:
+a <p> tag was added inside user.html.
+
+This tells me:
+
+Okay, after my last commit,
+this is the change I made.
+
+So git diff is comparing:
+my current file
+with the version stored in the last commit.
+
+----------------
+
+Making More Changes
+
+Now let me do something else.
+
+I go to about.html.
+
+I remove a couple of lines.
+I save the file.
+
+Now let me check git status.
+
+Git now tells me:
+two files are modified.
+
+Perfect.
+
+Now let me run git diff again.
+
+And now look at the output carefully.
+
+Git shows me:
+that two lines were removed from about.html,
+and one line was added in user.html.
+
+So now I know exactly:
+what I removed
+and what I added.
+
+No guessing.
+No memory required.
+
+-------
+
+What git diff Is Comparing Against
+
+Now this is very important.
+
+When I simply run:
+
+git diff
+
+Git is always comparing my current working directory
+with the last commit.
+
+Not staging area.
+Not remote repository.
+
+Just:
+current files vs last commit.
+
+------------------
+
+Comparing Two Commits
+
+Now let’s take this one step further.
+
+What if I want to compare:
+two older commits?
+
+Maybe:
+one commit was done in the morning,
+another commit was done at night.
+
+And I want to see:
+what progress I made between those two commits.
+
+Git allows that as well.
+
+I can do:
+
+git diff <commit-id-1> <commit-id-2>
+
+When I run this command,
+Git compares those two commits directly.
+
+And it shows:
+what lines were added,
+what lines were removed,
+and in which files.
+
+So this is not limited to just the latest commit.
+
+You can compare:
+any two commits,
+any point in time.
+
+-------
+
+Understanding the Output
+
+When Git shows the diff:
+
+Lines with a plus sign
+means lines were added.
+
+Lines with a minus sign
+means lines were removed.
+
+Git is not showing you the entire file.
+
+It is only showing:
+the changes.
+
+That’s why the output looks small and focused.
+
+----------
+
+Scrolling Inside git diff
+
+One more small thing.
+
+When you run git diff,
+sometimes the output is long.
+
+You can use:
+the down arrow key to scroll.
+
+And when you’re done,
+press q to exit.
+
+This is completely normal.
+
+--------------
+
+Modified Symbols in Editor
+
+You might also notice small symbols like M
+next to file names in your editor.
+
+That simply means:
+the file is modified.
+
+And git diff tells you how it is modified.
+
+-----
+
+Cleaning Up – Committing the Changes
+
+Now, before creating confusion,
+let me clean this up.
+
+I’ll add the changes.
+I run:
+git add .
+Then I commit:
+git commit -m "Updated p tags"
+And finally, I push:
+git push origin main
+Now everything is saved.
+
+If I check GitHub,
+I can see the new commit with the updated changes.
+
+--------
+
+Final Understanding
+
+So remember this:
+
+git status tells you what changed.
+git diff tells you how it changed.
+
+Before committing,
+always check git diff.
+
+It helps you:
+review your work,
+avoid mistakes,
+and stay confident about your changes.
+
+This is one of the most important commands
+you will use as a developer.
+
+-------
+
+Git Stash – Saving Work Temporarily
+
+Hey there.
+Welcome back.
+
+Now, in this lecture, let us talk about Git stash.
+
+Before we start, let me explain the idea in simple words.
+
+The word stash literally means
+to save something temporarily.
+
+So in Git,
+stash means saving your current work temporarily
+without committing it.
+
+---------------
+
+Why Do We Need Git Stash?
+
+Let’s say you are working on something.
+
+You make a few changes.
+You modify some files.
+
+But suddenly,
+you want to work on something else.
+
+Maybe:
+your teammate asked you to fix a bug,
+maybe you want to switch files,
+maybe you are not ready to commit yet.
+
+Now the problem is:
+you don’t want to lose your changes,
+but you also don’t want them right now.
+
+This is exactly where git stash helps.
+
+----------
+
+Current Situation – Modified File
+
+For example,
+I open my index.html.
+
+I add a new paragraph.
+Let’s say I type Lorem seven.
+
+I save the file.
+
+Now I come back to the terminal
+and run git status.
+
+Git tells me:
+index.html is modified.
+
+So the change is there,
+but it is not staged,
+not committed,
+not pushed.
+
+--------
+
+I Want to Go Back to Last Commit
+
+Now imagine this.
+
+I don’t want these changes right now.
+But I also don’t want to delete them.
+
+I want my project to look exactly like
+the last commit.
+
+But I want to keep my changes somewhere safe.
+
+That “somewhere safe”
+is git stash.
+
+--------
+
+Checking the Changes
+
+Before doing anything,
+let me run git diff.
+
+Now I can clearly see:
+multiple changes.
+
+A new paragraph,
+extra spaces,
+maybe a title change,
+maybe a link added.
+
+So this is not just one line.
+These are multiple small changes.
+
+Copy-paste is not practical here.
+
+So now I say:
+
+git stash
+
+And I press Enter.
+
+------
+
+What Just Happened?
+
+The moment I run git stash:
+
+Git takes all modified changes,
+and saves them in a temporary storage.
+
+And immediately after that,
+my working directory becomes clean.
+
+If I look at my files now:
+
+The new paragraph is gone.
+The title is back.
+The links are gone.
+
+Everything looks exactly like
+the last commit.
+
+But my changes are not lost.
+
+They are safely stored in stash.
+
+---------------
+
+Working on Something Else
+
+Now I’m free.
+
+I can work on anything else.
+
+For example,
+I go to about.html.
+
+I add a paragraph.
+I save it.
+
+I stage the change.
+I commit it.
+I push it.
+
+So now:
+my about changes are safely pushed,
+and my index changes are still stashed.
+
+---------
+
+Bringing Back the Stashed Changes
+
+Now I want my old changes back.
+
+So I simply say:
+
+git stash pop
+
+Think of it like a tray.
+
+I stored my changes in a tray.
+Now I’m taking them back out.
+
+The moment I press Enter,
+Git applies the stashed changes.
+
+If I open index.html again:
+
+The paragraph is back.
+The title is back.
+Everything is back exactly as before.
+
+Now if I run git status,
+Git shows that the file is modified again.
+
+From here,
+I can add, commit, and push normally.
+
+------------
+
+Checking the Stash List
+
+Now let’s talk about something important.
+
+Git allows you to store multiple stashes.
+
+You can see them using:
+
+git stash list
+
+If you used stash pop,
+the stash is removed automatically.
+
+So the list becomes empty.
+
+--------------
+
+Clearing a Stash
+
+Now suppose you stashed something,
+but later you decide:
+
+“I don’t want this anymore.”
+
+Then you can use:
+
+git stash clear
+
+This deletes all stashed changes permanently.
+
+Once cleared,
+you cannot bring them back.
+
+-----------
+
+Saving Another Stash
+
+Let’s try again.
+
+I go to user.html.
+I add an <h1> tag.
+I save.
+
+Now I don’t want to commit this yet.
+
+So I run:
+
+git stash
+
+Now the change is saved
+and the file is clean again.
+
+If I run:
+
+git stash list
+
+I can see one stash entry.
+
+---------------------
+
+Applying the Stash Again
+
+Now when I run:
+
+git stash pop
+
+The change comes back.
+
+My heading is visible again.
+
+Now I can commit it if I want.
+
+----------------
+
+Naming a Stash
+
+Now let’s go a little deeper.
+
+When you have multiple stashes,
+it’s better to give them names.
+
+For example,
+I go to contact.html.
+
+I add an <h1>
+and a paragraph.
+
+Now I want to stash this
+but I want to remember
+that this stash is for contact page.
+
+So I run:
+
+git stash save "contact"
+
+Now I move to about.html.
+
+I add some text.
+I save.
+
+And again I stash it:
+
+git stash save "about"
+
+Now if I run:
+
+git stash list
+
+I can see:
+two stashes.
+
+One for contact.
+One for about.
+
+---------
+
+Applying a Specific Stash
+
+Now suppose I want to apply
+only the contact changes.
+
+I can do:
+
+git stash apply 1
+
+If I want the about changes:
+
+git stash apply 0
+
+This applies the stash
+but does not remove it from the list.
+
+So the stash stays there.
+
+------------------
+
+Apply vs Pop
+
+This is very important.
+
+git stash pop
+applies the stash and removes it.
+
+git stash apply
+applies the stash
+but keeps it in the list.
+
+So:
+
+Pop = apply + delete
+Apply = apply only
+
+--------------
+
+Important commands:
+git stash
+git stash list
+git stash pop
+git stash apply
+git stash clear
+git stash save "name"
+
+------------------------------------------
+
+Git Restore – Undoing Changes Safely
+
+Hey there.
+Welcome back.
+
+Now, in this lecture, we are going to talk about Git restore.
+
+This is an interesting command,
+because it helps us go back to a previous state.
+
+In simple words,
+Git restore helps us undo changes.
+
+-----
+Starting from a Clean State
+
+Let me start from a clean situation.
+
+I run git status.
+
+Everything is clean.
+There are no modified files.
+
+That means my working directory
+is exactly the same as my last commit.
+----
+
+Making Some Changes
+
+Now I do some changes.
+
+I open about.html.
+
+I add a new paragraph.
+Let’s say I add Lorem ten.
+
+I save the file.
+
+Now I go back to the terminal
+and run git status.
+
+Git tells me:
+this file is modified.
+
+So now I have some changes
+that exist only in my working directory.
+
+------------
+
+Real-Life Scenario
+
+Now imagine this.
+
+I made these changes,
+then I got distracted.
+
+Maybe I went to another task,
+maybe I took a break.
+
+Now I come back
+and I realize:
+
+“I don’t want these changes.”
+
+I want my project to look exactly like
+the last commit.
+
+So the question is:
+how do I remove everything I did
+after the last commit?
+
+------
+
+Checking What Changed
+
+Before removing anything,
+I can always check the changes.
+
+I run git diff.
+
+Now Git shows me:
+lines added,
+lines removed,
+and maybe multiple edits.
+
+So I clearly see:
+yes, I made several changes.
+
+But I don’t want them anymore.
+
+---------
+
+Using Git Restore (Working Directory)
+
+Now this is where git restore comes in.
+
+Since my changes are only in the working directory,
+I can simply say:
+
+git restore about.html
+
+The moment I press Enter,
+Git restores the file to the last committed version.
+
+If I open the file again:
+the new paragraph is gone.
+
+If I run git status:
+everything is clean again.
+
+So what happened?
+
+Git compared my file
+with the last commit
+and removed all new changes.
+
+---------
+
+Understanding What Git Restore Did
+
+Git restore did not look at GitHub.
+It did not look at any older commit.
+
+By default,
+it restores the file
+to the most recent commit.
+
+So think of it like an undo button
+for uncommitted changes.
+
+-------------
+
+Git Restore with Staging Area
+
+Now let’s take this one step further.
+
+I again make some changes.
+
+I add a new line.
+I add another line.
+
+Now I run git status.
+
+The file is modified.
+
+This time,
+I run git add.
+
+So now the changes are in the staging area.
+
+If I run git status again,
+Git clearly tells me:
+changes are staged.
+---------
+
+Unstaging Using Git Restore
+
+Now suppose I change my mind.
+
+I don’t want these changes
+to be staged.
+
+I want them back in the working directory.
+
+So I say:
+
+git restore --staged index.html
+
+What this does is:
+it removes the file from the staging area
+and moves it back to modified state.
+
+If I run git status now:
+the file is no longer staged,
+it is just modified.
+
+----------
+
+Removing the Changes Completely
+
+Now suppose I don’t want the changes at all.
+
+So first:
+I unstaged them.
+
+Now they are back in the working directory.
+
+And now I say:
+
+git restore index.html
+
+And just like that,
+all changes are gone.
+
+File restored to last commit.
+
+--------------
+
+Summary of What We Did
+
+So remember this flow.
+
+If a file is modified:
+git restore file
+removes changes.
+
+If a file is staged:
+git restore --staged file
+moves it back to modified.
+
+Then again:
+git restore file
+removes the changes completely.
+
+------
+
+Why Git Restore Is So Useful
+
+Git restore is extremely helpful when:
+
+You made multiple changes,
+you lost track of them,
+and you just want a fresh start.
+
+Instead of manually undoing everything,
+you let Git do it safely.
+
+No guessing.
+No mistakes.
+
+-----------
+
+Important Clarification
+
+Now one very important thing.
+
+Git restore works with uncommitted changes.
+
+Once something is committed,
+restore alone is not enough.
+
+For committed changes,
+we use other commands like:
+git revert
+or
+git reset.
+
+We will talk about those later.
+Avoiding Confusion
+
+Right now, just remember this:
+They sound similar,
+but they behave differently.
+
+We will cover them one by one
+so you don’t get confused.
+
+
