@@ -1,0 +1,1263 @@
+Day3 _ Merge conflicts 
+
+Deep Dive into Branching & Conflicts
+
+Using Commit Shortcut (-a)
+
+Now let’s make a small change.
+
+Inside index.html,
+I add an <h1> tag.
+I save the file.
+Now instead of doing:
+git add
+git commit
+
+I can combine them.
+I run:
+
+git commit -a -m "updated index"
+
+This works because:
+
+the file was already tracked
+Git knows what changed
+
+This command stages and commits in one go.
+
+--------
+
+Important Rule About -a
+Now remember this clearly.
+This shortcut only works for tracked files.
+It will NOT work for new files.
+
+-----
+
+Creating a New File (About Page)
+
+Now I create a new file called about.html.
+I add some content.
+
+Now if I run:
+git commit -a -m "added about"
+
+This will NOT work.
+
+Why?
+Because about.html is untracked.
+
+Git does not know about this file yet.
+So first, I must do:
+
+git add about.html
+git commit -m "added about page"
+
+Now about.html becomes tracked.
+
+From now on, the shortcut will work for this file too.
+
+-----
+
+Creating a New Branch (Shortcut Way)
+
+Now let’s move to branching.
+Usually, creating a branch takes two steps:
+
+create the branch
+switch to it
+But Git provides a shortcut.
+
+I run:
+git checkout -b heading
+
+
+This command does two things at once:
+creates a branch called heading
+switches to it immediately
+
+Now I’m working inside the heading branch.
+
+-----
+
+Making Changes in Heading Branch
+
+Inside this branch,
+I open about.html.
+
+I add a heading like:
+“About FoodMate”
+
+I save the file.
+
+Now I commit the change.
+
+Since the file is already tracked,
+I can use the shortcut:
+
+git commit -am "added heading to about page"
+
+Now this commit exists only in the heading branch.
+
+Main branch does not have this change.
+
+-----------
+
+Viewing Branch Information
+
+Now let’s talk about a few helpful branch commands.
+
+If I run:
+git branch -v
+
+Git shows:
+all local branches
+their latest commit
+commit messages
+
+This helps you quickly understand:
+
+what branch exists
+what work is happening where
+
+---------------
+
+Understanding Merge Conflict Conceptually
+
+Now comes an important topic.
+
+Merge conflicts.
+
+A merge conflict happens when:
+two branches modify the same file
+on the same line
+
+For example:
+main branch edits a heading in index.html
+feature branch edits the same heading in index.html
+
+Individually, everything works fine.
+
+But when Git tries to merge:
+
+Git gets confused
+
+it doesn’t know which version to keep
+
+So Git stops and asks you:
+“Which change do you want?”
+
+This is called a merge conflict.
+
+---------
+
+Why Conflicts Are Normal
+
+Conflicts are not errors.
+They are signals.
+
+They mean:
+multiple people worked in parallel
+Git needs human decision
+
+This happens all the time in real projects.
+
+----
+
+Making a Change in Main Branch
+
+Now I’m inside my main branch.
+What I want to do is update index.html.
+
+So I open index.html
+and I update the heading.
+
+Let’s say I change it to:
+
+“Buy Now”
+I save the file.
+
+Now instead of doing add and commit separately,
+I use the combined command:
+
+git commit -am "index buy now"
+
+Now this change is committed on main branch.
+
+If I check the log,
+I can see this new commit.
+
+So this is the current state of main.
+
+------
+
+Switching to Heading Branch
+
+Now let me switch to my heading branch.
+
+git checkout heading
+
+Now I’m inside the heading branch.
+
+Here also, I open index.html.
+
+But instead of “Buy Now”,
+I change the heading to:
+“50% Off”
+
+This is a different change
+on the same line of code.
+
+Now I commit this:
+git commit -am "index 50% off"
+
+Now the heading branch has its own version of index.html.
+
+----
+
+Why a Conflict Will Happen
+
+Now pause and think.
+
+Main branch has:
+index heading → “Buy Now”
+
+Heading branch has:
+index heading → “50% Off”
+
+Same file.
+Same line.
+Different content.
+
+Now let’s merge and see what happens.
+
+-----
+
+Triggering the Merge Conflict
+
+First, I switch back to main:
+git checkout main
+
+Now I run:
+git merge heading
+
+Git now tries to merge.
+And Git says:
+
+Automatic merge failed
+Conflict in index.html
+
+This is a merge conflict.
+
+-----
+
+Understanding the Conflict
+
+Now I open index.html.
+
+Git has marked the conflict clearly.
+
+It shows me:
+Current change → from main branch
+Incoming change → from heading branch
+
+Git is basically asking:
+“Which one do you want to keep?”
+
+And this is an important point.
+
+👉 Git does NOT decide for you
+👉 YOU decide
+
+-----
+
+Resolving the Conflict
+
+Since I’m using VS Code,
+I see helpful buttons.
+
+I have three choices:
+
+Keep current change
+Keep incoming change
+Keep both changes
+
+If I choose:
+
+current → I keep “Buy Now”
+incoming → I keep “50% Off”
+both → I keep both lines
+
+Let’s say I keep the current change.
+
+I select it.
+VS Code cleans up the conflict markers.
+
+Now the file is fixed.
+
+-----
+
+Completing the Merge
+
+Now that the conflict is resolved,
+I save the file.
+
+Then I complete the merge.
+
+Git automatically creates a merge commit.
+
+If I check the log now,
+I can see a commit like:
+
+“Merge branch ‘heading’”
+
+That means:
+merge is complete
+conflict is resolved
+
+main branch is stable again
+
+-----
+
+Important Lesson About Conflicts
+
+Let me say this clearly.
+Merge conflicts are not errors.
+
+They simply mean:
+two branches touched the same line
+Git needs your decision
+
+This happens all the time in real projects.
+
+----
+
+Creating Another Branch for Practice
+
+Now let’s continue experimenting.
+
+I create a new branch and switch to it in one command:
+git checkout -b filter
+
+
+Now I’m inside the filter branch.
+Here, I create a new file called filter.html.
+
+I add some content.
+Then I commit it.
+
+This commit exists only in filter branch.
+
+-----
+
+Switching Back to Main
+
+Now I switch back to main:
+git checkout main
+
+Notice:
+filter.html is not present
+
+because it belongs to the filter branch
+
+----
+Understanding Merged vs Unmerged Branches
+
+Now let’s talk about some important branch commands.
+
+If I run:
+git branch --merged
+
+Git shows me:
+branches that are already merged into main
+
+Here, I see:
+main
+heading
+
+That means heading is safe to delete.
+If I run:
+git branch --no-merged
+
+Git shows:
+branches that are NOT merged
+
+Here, I see:
+filter
+
+That means filter still has work.
+
+-----
+
+Why This Is Useful
+
+This helps us answer important questions:
+
+Which branches are safe to delete?
+Which branches still hold work?
+Which branches should not be removed yet?
+
+--------
+
+Deleting Git Branches – Safe vs Force Delete
+
+Now it’s time to talk about deleting branches.
+
+Right now, we have created multiple branches.
+
+Some of them are already merged into main.
+Some of them are not merged yet.
+
+And Git treats these two cases very differently.
+
+-----
+
+Deleting a Merged Branch
+
+Let’s start with the easy one.
+
+If a branch is already merged into main,
+then Git knows that its work is already safe.
+
+So deleting that branch is not risky.
+For example, we have a branch called heading.
+We already merged heading into main.
+So now this branch is no longer needed.
+
+I run:
+
+git branch -d heading
+Git deletes the branch immediately.
+
+No warning.
+No error.
+
+Why?
+
+Because Git knows
+the changes are already in main
+nothing will be lost
+
+If I run git branch now,
+I can see that the heading branch is gone
+
+-----
+
+Deleting an Unmerged Branch
+
+Now let’s talk about the dangerous case.
+We also have a branch called filter.
+
+This branch contains:
+a file called filter.html
+
+changes that exist only in that branch
+These changes are not merged into main.
+
+So when I try to delete it using:
+
+git branch -d filter
+
+
+Git stops me.
+Git shows a warning.
+
+It basically says:
+
+“This branch is not merged.
+If you delete it, the changes will be lost.”
+
+Git is protecting your work.
+
+Why Git Shows This Warning
+
+This warning exists for a very good reason.
+
+Because if you delete this branch:
+the file exists nowhere else
+no other branch has this code
+the work is gone forever
+
+So Git forces you to think before deleting.
+
+-----
+
+Force Deleting a Branch
+
+Now, sometimes we want to delete it anyway.
+
+For example:
+
+an experiment failed
+the idea didn’t work
+the branch is useless
+
+In that case, we can force delete the branch.
+
+We use a capital D.
+
+git branch -D filter
+
+
+Now Git deletes the branch without asking.
+
+If I check branches again,
+the filter branch is gone.
+
+And yes —
+all the changes from that branch are also gone.
+
+----
+
+Small d vs Capital D (Very Important)
+
+Let me make this very clear.
+
+Small -d means:
+delete only if merged
+safe delete
+
+Capital -D means:
+delete no matter what
+force delete
+
+possible data loss
+
+This is one of the most important safety features in Git.
+
+---------------------------------------------
+
+
+Git Rebase – Understanding the Concept Clearly
+
+Now let’s talk about a new and slightly advanced topic, which is git rebase.
+
+This is an interesting topic.
+
+It’s popular in discussions,
+but in day-to-day work, it is used less frequently.
+
+And the reason is simple.
+
+We already have a very commonly used command called git merge,
+which solves most real-world problems in a safer way.
+
+Still, git rebase is important to understand,
+because:
+
+you will hear about it in interviews
+you will see it in discussions
+and sometimes teams do use it intentionally
+
+So let’s understand it properly, without confusion.
+
+
+-----
+
+What Problem Do Merge and Rebase Solve?
+
+First, one important thing.
+
+Both git merge and git rebase are used for the same purpose.
+
+They are used to:
+👉 integrate changes from one branch into another
+
+The difference is how they do it.
+
+-----
+
+Basic Setup – Two Branches
+
+Let’s assume a very common situation.
+
+We have:
+
+a main branch (primary branch)
+a feature branch
+
+On the main branch:
+some commits already exist
+work is moving forward
+
+At some point, we create a feature branch
+to work on a new feature, say product page.
+
+Now both branches move independently.
+
+This is normal Git workflow.
+
+-----
+
+How Git Merge Works (Quick Reminder)
+
+With git merge, what we usually do is:
+go to main branch
+merge feature branch into main
+
+Git then:
+creates a merge commit
+preserves full history
+shows clearly that a branch existed
+
+This is what we have been doing till now.
+
+This is safe.
+This is clear.
+This is why merge is preferred.
+
+-----
+
+So What Is Git Rebase?
+
+Now let’s understand git rebase conceptually.
+
+Instead of saying:
+
+“Bring feature branch into main”
+
+Rebase says:
+
+“Take feature commits
+and place them on top of main branch”
+
+In simple words:
+
+👉 Rebase moves commits, not branches.
+
+
+------
+
+Important Mental Model (Very Important)
+
+Think of it like this:
+
+main branch is the base
+feature branch has extra commits
+rebase re-applies feature commits
+as if they were written after main commits
+
+So the history becomes linear.
+
+No merge commit.
+No visible branch boundary.
+
+------
+
+What Happens Internally During Rebase
+
+This is very important to understand.
+
+Git does NOT move commits physically.
+
+Instead, Git:
+
+takes each feature commit
+replays the change on top of main
+creates new commit IDs
+
+That means:
+
+👉 Original feature commits are discarded
+👉 New commits are created with the same changes
+
+So history is rewritten.
+
+Why History Changes in Rebase
+
+Let’s say:
+you committed at 1 PM
+main got new commits at 3 PM
+you rebase at 5 PM
+
+After rebase:
+your commits appear after main commits
+timestamps and commit IDs change
+
+So the timeline is altered.
+
+This is why rebase must be used carefully.
+
+------
+
+Why Rebase Can Be Dangerous
+
+After rebase:
+
+there is no visible sign that a feature branch existed
+commit history looks like everything was done on main
+collaboration history is lost
+
+That’s why:
+
+👉 Rebase is not recommended on shared branches
+👉 Rebase is mostly avoided on main
+
+-------
+
+Now Let’s Do a Clean Practical Example
+Step 1: Make a Commit on Main
+
+On the main branch:
+
+I add a new paragraph to index.html
+I commit it
+I push it
+
+Now main branch has a new commit.
+
+This is our base.
+
+-----
+
+Step 2: Create a Feature Branch
+
+Now I create a new branch called product
+and switch to it.
+
+On this branch:
+
+I create product.html
+I commit it
+I update product.html again
+I commit again
+
+So product branch now has two commits.
+
+Main branch does NOT have these commits.
+
+----
+
+Step 3: Main Branch Moves Forward
+
+Now I switch back to main.
+
+I add another paragraph to index.html.
+I commit it.
+
+So now:
+main has moved forward
+product branch is behind main
+
+This is the key moment.
+
+-----
+
+What We Normally Would Do
+
+Normally, we would:
+
+go to main
+do git merge product
+
+But today, we want to understand rebase.
+
+-----
+
+Step 4: Rebase Feature Branch onto Main
+
+Important rule:
+
+👉 Rebase is done from the feature branch
+
+So first:
+I switch to product branch
+
+Now I run:
+
+git rebase main
+
+What Git does now:
+it takes product commits
+applies them after main commits
+checks for conflicts
+
+In our case:
+files are different
+no conflict happens
+
+So rebase succeeds.
+
+-----
+
+What Changed After Rebase
+
+Now product branch:
+
+contains main’s latest changes
+followed by product commits
+looks like everything happened in sequence
+
+-----
+
+Step 5: Update Main Branch
+
+Now I switch to main.
+Main still does NOT have product changes.
+
+So now I run:
+
+git rebase product
+
+This applies product commits onto main.
+
+Now main has:
+all main commits
+followed by product commits
+
+clean linear history
+
+------
+
+Very Important Observation
+
+Now check this carefully.
+
+If I check commit history of:
+
+main branch
+product branch
+
+They look almost identical.
+Both branches now share the same history.
+
+This is because rebase aligned them.
+----
+
+Why I Prefer Git Merge Over Git Rebase (And When Rebase Makes Sense)
+
+Welcome back.
+
+Now in this lecture,
+let’s clearly talk about why I personally prefer git merge over git rebase,
+and when rebase actually makes sense.
+
+This lecture is more about thinking and decision-making,
+not commands.
+
+So focus on the reasoning.
+
+----
+
+First and Most Important Reason: History
+
+The biggest reason I prefer git merge is history.
+
+When I use git merge,
+both branches keep their identity.
+
+That means:
+main branch has its own commit history
+feature branch has its own commit history
+I can clearly see:
+when a branch was created
+when it was merged
+what happened before and after the merge
+
+Nothing is hidden.
+
+-------
+
+What Happens to History in Rebase
+
+With git rebase,
+this history is flattened.
+
+After rebase:
+
+main and feature point to the same commit
+both branches share identical history
+there is no visible sign that a feature branch ever existed
+
+That means:
+
+I lose contextual information
+I lose branch-level reasoning
+
+For long-term projects,
+this is a big problem.
+
+--------
+
+
+Second Problem: Conflict History
+
+Now let’s talk about merge conflicts.
+When I use git merge:
+and a conflict happens
+
+Git creates a merge commit
+that commit tells me exactly where conflict occurred
+
+Even months later,
+I can look at the history and say:
+
+“Okay, here is where the conflict happened.”
+
+That information is preserved.
+
+----------
+
+
+What Happens with Conflicts in Rebase
+
+With git rebase,
+conflicts are resolved silently.
+
+After rebase:
+
+conflicts are gone
+everything looks clean
+but there is no record of conflict resolution
+
+If I check the history later:
+I don’t know where the conflict happened
+I don’t know why certain decisions were made
+
+That loss of information matters in real projects.
+
+---------
+
+Third Issue: Order of Commits
+
+Now let’s talk about commit order.
+
+With rebase:
+
+feature commits are always added on top of main
+regardless of when they were originally created
+
+If:
+
+main had 100 commits in between
+feature commits still appear at the top
+So the original timeline is lost.
+
+This makes history misleading.
+
+The code works,
+but the story behind it is gone.
+
+-----
+
+Why Rebase Is Not Recommended for Shared Branches
+
+Because rebase:
+
+rewrites history
+changes commit IDs
+affects everyone working on that branch
+
+That’s why:
+
+rebase is discouraged on main
+rebase is discouraged on shared branches
+rebase is discouraged in open-source PRs
+
+Open-source projects want history.
+
+They want:
+transparency
+traceability
+accountability
+
+--------
+
+Simple Mental Rule
+
+If the branch is:
+
+private → rebase is okay
+shared or public → merge is safer
+
+-------------------------------------
+
+Understanding .gitignore – Ignoring Files in Git
+
+Now, before we jump into other major Git topics,
+I want to talk about a few small but very important concepts.
+
+One of them is ignoring files in Git.
+
+And this is done using something called .gitignore
+
+What Does “Ignore” Mean in Git?
+
+When I say ignore,
+I simply mean that there are certain files
+that I do not want Git to track.
+
+These files should:
+
+stay on my system
+never go to staging
+never go to GitHub
+
+And Git gives us a clean way to do that.
+
+------
+
+Why Do We Need to Ignore Files?
+
+Let me give you a very common example.
+
+Suppose you are working on a project
+and you have a file called .env.
+
+Inside this file, you might have:
+
+passwords
+API keys
+database credentials
+
+This file is extremely sensitive.
+
+You never want this file:
+committed
+pushed
+
+shared publicly
+
+So this file must be ignored.
+
+-------
+
+Other Common Files We Ignore
+
+Apart from .env,
+there are many other files we usually ignore.
+
+For example:
+
+system-generated files
+editor configuration files
+build folders
+log files
+temporary databases
+junk files created by OS or tools
+
+These files are not part of your actual source code.
+
+So we tell Git:
+“Please ignore them.”
+
+
+---------
+
+Introducing .gitignore
+
+Git provides a special file for this purpose.
+
+That file is called:
+
+.gitignore
+
+This name is fixed.
+
+You cannot rename it.
+You cannot change it.
+
+Git specifically looks for a file named .gitignore.
+
+
+How .gitignore Works
+
+Inside the .gitignore file,
+you simply write the names of files or folders
+that you want Git to ignore.
+
+For example, if I write:
+
+.env
+
+
+That means:
+
+Git will ignore the .env file
+.env will remain untracked forever
+
+Even if the file exists on my system,
+Git will act as if it doesn’t matter.
+
+----
+
+Important Point About .gitignore
+
+Now pay attention to this.
+
+The .gitignore file itself is tracked.
+
+That means:
+
+.gitignore goes to staging
+.gitignore gets committed
+.gitignore is pushed to GitHub
+
+Why?
+
+Because we want everyone in the team
+to follow the same ignore rules.
+
+--------
+
+What Happens to Ignored Files
+
+Files mentioned inside .gitignore:
+
+stay in the working directory
+remain untracked
+never move to staging
+never reach GitHub
+
+Git completely ignores them
+
+-----
+
+Checking Git Status
+
+If I run:
+
+git status
+
+You’ll notice something interesting.
+
+Git shows:
+.gitignore as untracked (initially)
+
+but does NOT show ignored files
+
+That’s how you know ignoring is working.
+
+-----
+
+Committing .gitignore
+
+Now I add and commit the .gitignore file.
+
+I do:
+
+git add .gitignore
+git commit -m "added gitignore"
+git push origin main
+
+
+Now .gitignore is part of the repository.
+
+-----
+
+Why .gitignore Is Very Important
+
+Using .gitignore helps you:
+
+protect sensitive data
+keep repository clean
+avoid pushing unnecessary files
+follow professional practices
+
+Every real-world project uses .gitignore
+
+-----
+
+
+What Is a README File?
+
+A README file is basically a description of your project.
+
+It tells people:
+
+what the project is about
+what problem it solves
+how to run it
+how to test it
+what technologies are used
+
+In simple words,
+README answers the question:
+
+“Why should I care about this project?”
+
+----
+
+Why README Matters
+
+Let me give you a real example.
+
+If I open one of my own projects,
+say a Django project,
+and I scroll down the repository,
+
+you’ll notice something important.
+
+Before you even look at the code,
+you already understand:
+
+what the project does
+what tech stack is used
+how the UI looks
+how to log in for demo
+where documentation is linked
+
+All of that information is coming from the README file.
+
+----
+
+README from a Company Perspective
+
+Now let’s take a bigger example.
+
+If you open an official repository,
+like React or any other major library,
+
+you’ll see that their README is very detailed.
+
+It contains:
+
+installation steps
+usage examples
+documentation links
+contribution guidelines
+license information
+
+So README is not just for small projects.
+
+It is mandatory for professional projects.
+
+----
+
+How to Create a README File
+
+Creating a README is very simple.
+
+You just need to create a new file called:
+
+README.md
+
+The name matters.
+README must be uppercase
+.md means Markdown
+
+GitHub automatically understands this file
+and displays it beautifully.
+
+----
+
+What Is Markdown?
+
+Markdown is a simple writing format.
+
+It looks like plain text,
+but GitHub renders it as styled content.
+
+That means:
+
+headings
+bold text
+italic text
+code blocks
+images
+links
+
+All without complex syntax.
+
+----
+
