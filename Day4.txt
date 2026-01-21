@@ -1,0 +1,839 @@
+Git Squash — Complete Teaching Script
+
+Now in this session, we are going to talk about Git Squash.
+Git squash is a technique that allows us to combine multiple commits into a single commit.
+This is extremely useful when we want to keep our commit history clean and meaningful, especially before pushing code or raising a pull request.
+
+Why Do We Need Squash?
+
+While developing a feature, we usually make many small commits like:
+
+small update
+typo fix
+minor change
+final fix
+
+These commits are fine while working,
+but we don’t want all of them permanently in our main branch history.
+
+That’s where Git Squash comes into the picture.
+------
+Practical Example Setup
+git log --oneline 
+
+do multiple commits 
+
+Observing the Problem
+
+Now let’s check the commit history.
+
+git log --oneline
+
+
+You’ll notice that I have multiple commits related only to the index file.
+
+If I push this now, GitHub will show 4 separate commits,
+even though logically this is just one change.
+
+I don’t want that.
+
+I want one clean commit called “updated index”.
+
+----
+
+
+Understanding HEAD (Very Important)
+
+Before squashing, let’s quickly understand HEAD.
+
+HEAD → current commit
+HEAD~1 → one commit before
+HEAD~2 → two commits before
+HEAD~3 → three commits before
+
+So if I want to combine the last 4 commits,
+I’ll use HEAD~4.
+
+-----
+
+Git squash is done using interactive rebase.
+
+git rebase -i HEAD~4
+
+or 
+
+git rebase -i 08e20cf^
+
+
+This opens an interactive editor.
+
+Interactive Rebase Screen
+
+You’ll see something like this:
+
+pick a1b2c3 updated user
+pick d4e5f6 updated index
+pick g7h8i9 index updated again
+pick j1k2l3 final index update
+
+Explain Clearly 👇
+
+pick → keep the commit
+
+s or squash → combine this commit with the one above
+
+------------
+
+
+Squashing the Commits
+
+I want to keep one commit and squash the rest.
+
+So I’ll modify it like this:
+
+pick a1b2c3 updated user
+pick d4e5f6 updated index
+s g7h8i9 index updated again
+s j1k2l3 final index update
+
+
+This means:
+
+updated index stays
+The next two commits are merged into it
+Now save and exit the editor.
+
+(Press ESC, type :wq, hit Enter)
+
+------------
+
+Final Commit Message
+
+Git now asks me to confirm the final commit message.
+
+I’ll keep:
+
+updated index
+
+
+Save and exit again.
+
+✅ Result Verification
+git log --oneline
+
+
+Now you can see:
+
+updated user
+updated index
+
+All index-related commits are now combined into a single commit.
+
+----
+
+Push to Remote
+git push origin main
+
+
+When I refresh GitHub,
+I can clearly see only two meaningful commits.
+
+The updated index commit now contains all changes:
+
+link added
+updates done
+final changes
+
+Instead of three separate commits.
+
+🎯 Key Takeaways (Say This Slowly)
+
+Pick → commit stays
+Squash → commit gets merged
+Squash is used to clean history
+Squash is usually done before merging or pushing
+
+----------
+
+Commit freely while working, squash before merging.
+----------------------------
+
+
+
+Git revert is used when we want to undo a commit safely,
+without rewriting Git history.
+
+This is extremely important when you are working on shared branches like main.
+
+What is Git Revert?
+
+Git Revert creates a new commit that reverses the changes made by an earlier commit.
+
+📌 One-liner:
+
+“Revert does not remove a commit — it adds a new commit that undoes it.”
+
+
+Practical Example Setup
+
+git log --oneline
+-------------
+
+Reverting Using HEAD (Most Common Case)
+
+When the last commit is wrong,
+we don’t even need the commit hash.
+
+We can simply use HEAD.
+
+Command:
+git revert HEAD
+
+
+Explain 👇
+
+HEAD refers to the current/latest commit
+
+This command reverts only the most recent commit
+
+-------
+Commit Message
+
+Git opens an editor with a default message:
+
+Revert "updated index"
+
+
+This is auto-generated and completely fine.
+
+Save and exit.
+
+---------
+
+Check the History
+git log --oneline
+
+everting an Older Commit Using HEAD~n
+
+Now suppose the last commit is fine,
+but a previous commit caused the issue.
+
+We can still use HEAD.
+
+Example:
+git revert HEAD~1
+
+
+Explain:
+
+HEAD~1 → one commit before HEAD
+
+HEAD~2 → two commits before HEAD
+
+So this command reverts the second latest commit.
+
+------------
+using commit id 
+
+git revert a1b2c3
+
+-----------------
+
+
+High-Level Difference (Say This First)
+
+git restore works on FILES
+git revert works on COMMITS
+
+This one sentence already solves 80% of confusion.
+
+What is git restore?
+
+git restore is used to undo file-level changes
+before they become part of a commit.
+
+It is mainly used in:
+
+Working directory
+
+Staging area
+
+📌 git restore does NOT create a commit.
+
+-------
+
+What is git revert?
+
+git revert is used to undo a commit safely.
+
+It:
+
+Works on commits
+
+Creates a new commit
+
+Does not rewrite history
+
+📌 git revert is safe for shared branches like main.
+
+---------
+
+
+
+
+----------
+
+
+When to Use What? (Very Important)
+✅ Use git restore when:
+
+Changes are not committed
+You made a mistake in a file
+You want to unstage a file
+
+✅ Use git revert when:
+
+The change is already committed
+The commit is pushed
+You’re working in a team
+
+-----------------------------------------------
+
+
+Topic: Git Reset — Undoing Commits Locally
+
+Git reset is a powerful command, but also a dangerous one if used incorrectly.
+
+So today, we’ll understand:
+
+What git reset does
+The different types of reset
+When to use it
+When NOT to use it
+
+------
+
+
+What is Git Reset? (Definition)
+
+Git reset moves the HEAD pointer to a previous commit.
+
+Depending on the type of reset, it can:
+
+Undo commits
+Unstage files
+Remove file changes
+
+📌 One-line definition:
+
+“Git reset rewrites history by moving HEAD.”
+
+------------
+
+Very Important Warning (Say This Slowly)
+
+❌ Do NOT use git reset on pushed commits
+❌ Do NOT use git reset on shared branches like main
+✅ Safe only for local, unpushed work
+
+-------
+
+Example Setup
+
+First, let me check my commit history.
+
+git log --oneline
+
+
+Assume we have:
+
+c3  final index update
+c2  index updated
+c1  updated user
+
+--------
+
+git reset --soft (Safest Reset)
+🧠 What It Does
+
+Moves HEAD back
+Keeps changes staged
+Code is NOT lost
+
+🧪 Scenario
+
+I committed something by mistake,
+but I want to edit the commit message or code.
+
+Command:
+git reset --soft HEAD~1
+
+
+Explain:
+
+Commit is removed
+Files stay in staging area
+Ready to recommit
+
+Use Case
+
+“I want to fix my last commit.”
+
+----------
+
+git reset --mixed (Default Reset)
+🧠 What It Does
+
+Moves HEAD back
+Unstages files
+Keeps changes in working directory
+
+(Default mode if you don’t specify anything)
+
+🧪 Scenario
+
+I committed too early,
+I want to re-review my files.
+
+Command:
+git reset HEAD~1
+
+or
+
+git reset --mixed HEAD~1
+
+
+Explain:
+
+Commit removed
+Files are unstaged
+Code is still safe
+
+Use Case
+“I want to re-stage files properly.”
+
+----------
+
+
+git reset --hard (🔥 Dangerous)
+🧠 What It Does
+
+Moves HEAD back
+Deletes commit
+Deletes file changes
+
+⚠️ Code is permanently lost
+
+🧪 Scenario
+
+I made a commit and file changes,
+and I want to completely discard everything.
+
+Command:
+git reset --hard HEAD~1
+
+
+Explain:
+
+Commit removed
+
+Files removed
+
+Working directory cleaned
+
+⚠️ Warning (Say This Clearly)
+
+❌ If you use this on pushed code → disaster
+❌ Use only when you’re 100% sure
+
+----------
+
+
+| Reset Type | Commit    | Staging   | Working Directory |
+| ---------- | --------- | --------- | ----------------- |
+| --soft     | ❌ removed | ✅ kept    | ✅ kept            |
+| --mixed    | ❌ removed | ❌ removed | ✅ kept            |
+| --hard     | ❌ removed | ❌ removed | ❌ removed         |
+
+
+git reset (Commit-Level Undo — Local)
+📌 What it does
+
+git reset moves HEAD backward and removes commits.
+
+Rewrites history
+
+Dangerous if misused
+
+Should be used only locally
+
+| Feature                   | git restore       | git reset                 | git revert             |
+| ------------------------- | ----------------- | ------------------------- | ---------------------- |
+| Works on                  | Files             | Commits (HEAD)            | Commits                |
+| Creates commit            | ❌ No              | ❌ No                      | ✅ Yes                  |
+| Rewrites history          | ❌ No              | ✅ Yes                     | ❌ No                   |
+| Safe for pushed code      | ❌ No              | ❌ No                      | ✅ Yes                  |
+| Used before commit        | ✅ Yes             | ❌ No                      | ❌ No                   |
+| Used after commit         | ❌ No              | ✅ Yes (local)             | ✅ Yes                  |
+| Affects working directory | ✅ Yes             | Depends (soft/mixed/hard) | ✅ Yes (via new commit) |
+| Common use                | Undo file changes | Undo local commits        | Undo shared commits    |
+| Typical branch            | Any               | Feature / local           | main / production      |
+
+
+----------------------------------------
+
+Git History & Debugging
+
+
+Goal of This Session
+
+By the end of this session, you should be able to answer:
+
+Who changed this line?
+When was this change made?
+Which commit caused the issue?
+How to recover a lost commit?
+---------------------
+
+git log --oneline --graph
+📌 Read the Commit Timeline
+
+First, let me look at the commit history.
+
+
+Explain slowly 👇
+--oneline → short and readable commits
+--graph → shows branch structure visually
+
+This helps us understand how the project evolved.
+
+
+-----
+
+Scenario: “Which commit broke the app?”
+
+When something breaks, this is the first command you run.
+
+You look at:
+
+Recent commits
+
+Merge points
+
+Feature changes
+
+2️⃣ git show <commit>
+📌 Inspect What Changed
+
+Now let’s inspect a specific commit.
+
+git show a1b2c3
+
+
+Explain 👇
+
+This shows:
+
+Files changed
+Lines added
+Lines removed
+Commit message
+Author & date
+
+Scenario: “What exactly changed here?”
+
+Instead of guessing,
+we see the exact diff.
+
+This helps in:
+
+Debugging bugs
+Code reviews
+Understanding old code
+
+----------
+
+
+git blame <file>
+📌 Find Who Changed a Line
+
+Now let’s answer one of the most common questions in software teams.
+
+git blame index.html
+
+
+Explain 👇
+
+For every line, Git shows:
+
+Commit ID
+Author
+Timestamp
+This tells us who last modified each line.
+
+Scenario: “Who changed this line?”
+
+This is NOT about blaming people 😄
+It’s about:
+
+Asking the right person
+
+Understanding the reason behind the change
+
+
+----------
+
+git reflog 🔥
+📌 Recover Lost Commits (Life Saver)
+
+Now let’s talk about one of the most powerful Git commands.
+
+git reflog
+
+
+Explain clearly 👇
+
+git reflog shows:
+Every movement of HEAD
+Resets
+Rebases
+
+Checkouts
+
+Even commits that disappear from git log appear here.
+
+🧪 Scenario: “My commit is missing!”
+
+This usually happens after:
+
+git reset
+git rebase
+Mistaken checkout
+
+But don’t panic.
+git reflog
+
+---------------------
+
+Introducing .gitignore
+
+Git provides a special file for this purpose.
+
+That file is called:
+
+.gitignore
+
+This name is fixed.
+
+You cannot rename it.
+You cannot change it.
+
+Git specifically looks for a file named .gitignore.
+
+
+How .gitignore Works
+
+Inside the .gitignore file,
+you simply write the names of files or folders
+that you want Git to ignore.
+
+For example, if I write:
+
+.env
+
+
+That means:
+
+Git will ignore the .env file
+.env will remain untracked forever
+
+Even if the file exists on my system,
+Git will act as if it doesn’t matter.
+
+----
+
+Important Point About .gitignore
+
+Now pay attention to this.
+
+The .gitignore file itself is tracked.
+
+That means:
+
+.gitignore goes to staging
+.gitignore gets committed
+.gitignore is pushed to GitHub
+
+Why?
+
+Because we want everyone in the team
+to follow the same ignore rules.
+
+--------
+
+What Happens to Ignored Files
+
+Files mentioned inside .gitignore:
+
+stay in the working directory
+remain untracked
+never move to staging
+never reach GitHub
+
+Git completely ignores them
+
+-----
+
+Checking Git Status
+
+If I run:
+
+git status
+
+You’ll notice something interesting.
+
+Git shows:
+.gitignore as untracked (initially)
+
+but does NOT show ignored files
+
+That’s how you know ignoring is working.
+
+-----
+
+Committing .gitignore
+
+Now I add and commit the .gitignore file.
+
+I do:
+
+git add .gitignore
+git commit -m "added gitignore"
+git push origin main
+
+
+Now .gitignore is part of the repository.
+
+-----
+
+Why .gitignore Is Very Important
+
+Using .gitignore helps you:
+
+protect sensitive data
+keep repository clean
+avoid pushing unnecessary files
+follow professional practices
+
+Every real-world project uses .gitignore
+
+
+----------------------------
+
+So far, we’ve mostly created repositories locally.
+But in real-world projects, we almost always start with existing code on GitHub.
+
+That’s where git clone comes in.
+
+🧠 What is Git Clone? (Definition)
+
+git clone is used to create a local copy of a remote repository.
+
+It:
+
+Downloads the entire project
+Includes full commit history
+Automatically connects to the remote repository
+
+📌 One-line definition:
+
+“Clone copies a remote repository to your local machine.”
+
+Why Do We Need git clone?
+
+Imagine joining a company or a project.
+
+You don’t write code from scratch.
+You clone the repository and start working.
+
+-----------
+
+After Cloning
+
+Let me move into the project folder.
+
+cd repository-name
+
+
+Now if I check:
+
+git status
+
+
+You’ll see:
+
+“On branch main”
+“Working tree clean”
+
+Meaning:
+
+You are connected to Git
+
+You are ready to work
+
+------------
+
+
+Scenario: Clone vs Download ZIP
+
+Ask students 👇
+
+Why not just download ZIP?
+
+Explain:
+
+ZIP ❌ No Git history
+ZIP ❌ No commits
+ZIP ❌ No push/pull
+
+Clone ✅ Full Git power
+
+-------
+
+Fork — Contributing Without Direct Access
+🎤 Introduction
+
+Hey there.
+Welcome back.
+
+So far, we’ve learned how to clone repositories, create branches, and work with commits.
+Now we’re going to talk about something that exists only on GitHub — Fork.
+
+Fork is extremely important if you want to contribute to open-source projects or repositories where you don’t have write access.
+
+🧠 What is a Fork? (Definition)
+A Fork is a copy of someone else’s repository created on your own GitHub account.
+
+📌 One-line definition:
+“Fork creates your own GitHub copy of a repository so you can work independently.”
+
+
+----
+
+Why Do We Need Fork?
+
+Ask students 👇
+
+What if you want to contribute to a project,
+but you cannot push directly to that repository?
+
+For example:
+
+Open-source projects
+Someone else’s public repo
+Company repo where you don’t have access
+
+👉 You fork it.
+
+----
+
